@@ -31,6 +31,8 @@ RUN chown -R www-data:www-data /var/www/html/storage \
 RUN php artisan config:clear || true
 RUN php artisan storage:link || true
 
+COPY ca-cert.pem /var/www/html/ca-cert.pem
+
 EXPOSE 80
 
-CMD php artisan migrate --force && apache2-foreground
+CMD php artisan migrate --force && php artisan db:seed --force && apache2-foreground
