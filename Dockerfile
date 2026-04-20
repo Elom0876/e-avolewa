@@ -28,9 +28,9 @@ RUN chown -R www-data:www-data /var/www/html/storage \
     /var/www/html/bootstrap/cache \
     /var/www/html/database/database.sqlite
 
-RUN php artisan config:clear \
-    && php artisan storage:link || true
+RUN php artisan config:clear || true
+RUN php artisan storage:link || true
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD php artisan migrate --force && apache2-foreground
