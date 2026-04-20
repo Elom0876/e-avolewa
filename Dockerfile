@@ -1,6 +1,5 @@
 FROM php:8.2-apache
 
-# Installation des extensions PHP
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -9,29 +8,29 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
-# Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configuration Apache
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 RUN a2enmod rewrite
 
-# Copier le projet
 WORKDIR /var/www/html
 COPY . .
 
-# Installer les dépendances
 RUN composer install --no-dev --optimize-autoloader
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN touch /var/www/html/database/database.sqlite
 
-# Exposer le port
+RUN chown -R www-data:www-data /var/www/html/storage \
+    /var/www/html/bootstrap/cache \
+    /var/www/html/database/database.sqlite
+
+RUN php artisan config:clear \
+    && php artisan storage:link || true
+
 EXPOSE 80
 
-# Démarrer Apache
 CMD ["apache2-foreground"]
