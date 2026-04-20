@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
+    default-mysql-client \
     && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -19,20 +20,13 @@ RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 COPY . .
+COPY ca-cert.pem /var/www/html/ca-cert.pem
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN touch /var/www/html/database/database.sqlite
-
 RUN chown -R www-data:www-data /var/www/html/storage \
-    /var/www/html/bootstrap/cache \
-    /var/www/html/database/database.sqlite
-
-RUN php artisan config:clear || true
-RUN php artisan storage:link || true
-
-COPY ca-cert.pem /var/www/html/ca-cert.pem
+    /var/www/html/bootstrap/cache
 
 EXPOSE 80
 
-CMD php artisan migrate --force && php artisan db:seed --force && apache2-foreground
+CMD php artisan migrate --force && apache2-foreground
