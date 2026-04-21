@@ -24,8 +24,7 @@ COPY ca-cert.pem /var/www/html/ca-cert.pem
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN chown -R www-data:www-data /var/www/html/storage \
-    /var/www/html/bootstrap/cache
+RUN a2dismod mpm_event mpm_worker && a2enmod mpm_prefork rewrite
 
 EXPOSE 80
 
