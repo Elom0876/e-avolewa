@@ -22,9 +22,9 @@ WORKDIR /var/www/html
 COPY . .
 COPY ca-cert.pem /var/www/html/ca-cert.pem
 
-RUN composer install --no-dev --optimize-autoloader
-
 RUN a2dismod mpm_event mpm_worker && a2enmod mpm_prefork rewrite
+
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 80
 
