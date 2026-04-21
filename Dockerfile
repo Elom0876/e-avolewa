@@ -27,4 +27,4 @@ RUN a2dismod mpm_event mpm_worker && a2enmod mpm_prefork rewrite
 
 EXPOSE 80
 
-CMD php artisan migrate --force && apache2-foreground
+CMD apache2-foreground
