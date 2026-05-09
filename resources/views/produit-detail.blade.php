@@ -174,6 +174,16 @@
     <i class="fab fa-whatsapp me-2" style="font-size: 1.2rem;"></i>
     Commander via WhatsApp
 </a>
+            <!-- Bouton Générer mon style IA -->
+<a href="/produits/{{ $produit->id }}/style"
+   class="btn btn-lg w-100 rounded-pill py-3 fw-bold mb-3"
+   style="background: linear-gradient(135deg, #6B2D0A, #E8A020);
+          color: white; border: none; font-size: 1rem;
+          transition: all 0.3s;"
+   onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px rgba(232,160,32,0.4)'"
+   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+    <i class="fas fa-magic me-2"></i>✨ Générer mon style avec l'IA
+</a>
 
             <a href="/produits" class="btn btn-lg w-100 rounded-pill py-3 fw-bold"
                style="border: 2px solid #1a1a2e; color: #1a1a2e;

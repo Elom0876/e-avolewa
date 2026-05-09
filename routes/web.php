@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ModeleController;
+use App\Http\Controllers\IAController;
 
 Route::get('/', function () {
     $produits = \App\Models\Produit::latest()->take(3)->get();
@@ -41,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Admin
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index']);
     Route::get('/produits/creer', [AdminController::class, 'creer']);
     Route::post('/produits/creer', [AdminController::class, 'stocker']);
@@ -57,3 +58,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 });
 Route::get('/categories', [CategorieController::class, 'index']);
 Route::get('/categories/{id}', [CategorieController::class, 'show']);
+
+Route::get('/produits/{id}/style', [IAController::class, 'index']);
+Route::post('/produits/{id}/style', [IAController::class, 'generer']);
